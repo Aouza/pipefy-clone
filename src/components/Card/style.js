@@ -1,0 +1,29 @@
+import styled from 'styled-components';
+
+export const Container = styled.div`
+
+    position: relative;
+    background: #fff;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    padding: 15px;
+    box-shadow: 0 1px 4px 0 rgba(192, 208, 230, .8);
+    border-top: 20px solid rgba(230, 236, 245, .4);
+
+
+    header{
+
+    }
+
+    img{
+        width: 24px;
+        height: 24px;
+        border-radius: 2px;
+        margin-top: 5px;
+    }
+`;
+
+export const Label = styled.span`
+
+`;
+
