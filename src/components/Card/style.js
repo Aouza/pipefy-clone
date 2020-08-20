@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const Container = styled.div`
 
@@ -9,9 +9,30 @@ export const Container = styled.div`
     padding: 15px;
     box-shadow: 0 1px 4px 0 rgba(192, 208, 230, .8);
     border-top: 20px solid rgba(230, 236, 245, .4);
+    cursor: grab;
+    ${props => props.isDragging && css`
+        border: 2px dashed rgba(0, 0, 0, .2);
+        padding-top: 31px;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+        cursor: grabbing;
 
+        p, img, header{
+            opacity: 0;
+        }
+
+    `}
 
     header{
+        position: absolute;
+        top: -22px;
+        left: 15px;
+    }
+
+    p{
+        font-weight: 500;
+        line-height: 20px;
 
     }
 
@@ -21,9 +42,15 @@ export const Container = styled.div`
         border-radius: 2px;
         margin-top: 5px;
     }
+
 `;
 
 export const Label = styled.span`
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    display: inline-block;
+    background: ${props => props.color};
 
 `;
 

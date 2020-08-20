@@ -1,15 +1,65 @@
-import React from 'react';
+import React, { useRef, useContext } from 'react';
+import { useDrag, useDrop } from 'react-dnd';
+
+import BoardContext from '../Board/context';
 
 import { Container, Label } from './style';
 
-function Card(){
+function Card({ data, index, indexList }){
+    const ref = useRef();
+    const { move } = useContext(BoardContext);
+
+    const [{ isDragging }, dragRef] = useDrag({
+        item: {type: 'CARD', index, indexList},
+        collect: monitor => ({
+            isDragging: monitor.isDragging(),
+        })
+    });
+
+    const [, dropRef ] = useDrop({
+        accept: 'CARD',
+        hover(item, monitor){
+            const draggedIndexList = item.indexList;
+            const targetIndexList = indexList;
+            const draggedIndex = item.index;
+            const targetIndex = index;
+
+            if(draggedIndex === targetIndex && draggedIndexList === targetIndexList){
+                return;
+            }
+
+            const targetSize = ref.current.getBoundingClientRect();
+            const targetCenter = (targetSize.bottom - targetSize.top) / 2;
+
+            const draggedOffset =  monitor.getClientOffset();
+            const draggedTop = draggedOffset.y - targetSize.top;
+            
+            if(draggedIndex < targetIndex && draggedTop < targetCenter){
+                return;
+            }
+
+            if(draggedIndex > targetIndex && draggedTop > targetCenter){
+                return;
+            }
+
+            move(draggedIndexList, targetIndexList, draggedIndex, targetIndex);
+
+            item.index = targetIndex;
+            item.indexList = targetIndexList;
+
+        }   
+    })
+
+    dragRef(dropRef(ref));
+
     return(
-        <Container>
+        <Container ref={ref} isDragging={isDragging}>
             <header>
-                <Label color="#7159c1" />
+                {data.labels && <Label color={data.labels} />}
             </header>
-            <p>Fazer migração completa do servidor</p>
-            <img src="https://avatars3.githubusercontent.com/u/33739228?s=460&u=0a7e01a18896312898794077ae004e07fe6e7cb0&v=4" alt="Alison Souza"/>
+            <p>{data.content}</p>
+
+            { data.user && <img src={data.user} alt=""/>}
         </Container>
     );
 }

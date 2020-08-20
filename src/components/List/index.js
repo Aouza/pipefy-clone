@@ -1,26 +1,34 @@
 import React from 'react';
 import { MdAdd } from 'react-icons/md';
 
-import Card from '../Card';
-
 import { Container } from './style';
 
-function List(){
+import Card from '../Card';
+
+function List({ data, index: indexList }){
     return(
 
-        <Container>
+        <Container done={ data.done }>
             <header>
-                <h2>Tarefas</h2>
-                <button type="button">
-                    <MdAdd size={24} color="#fff" />
-                </button>
+                <h2>{data.title}</h2>
+                {
+                    data.creatable && (
+                        <button type="button">
+                            <MdAdd size={24} color="#fff" />
+                        </button>
+                    )
+                }
             </header>
 
             <ul>
-                <Card />
-                <Card />
-                <Card />
-                <Card />
+                { data.cards.map((card, index) => {
+                    return <Card 
+                    key={card.id} 
+                    indexList={indexList}
+                    index={index} 
+                    data={card}
+                    />;
+                })}
             </ul>
         </Container>
 
